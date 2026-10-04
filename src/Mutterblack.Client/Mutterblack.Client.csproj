@@ -6,4 +6,8 @@
     <PackageReference Include="Microsoft.Extensions.Options.DataAnnotations" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mutterblack.Client.Test" />
+  </ItemGroup>
+
 </Project>

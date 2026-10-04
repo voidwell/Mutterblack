@@ -85,3 +85,6 @@ dotnet_diagnostic.CA2012.severity = warning      # ValueTask usage guidance
 dotnet_diagnostic.CA2254.severity = warning      # Logging message should be constant
 
 dotnet_diagnostic.CS1591.severity = none         # Missing XML comment for publicly visible type or member
+
+[test/**.cs]
+dotnet_diagnostic.CA2000.severity = none         # Dispose objects correctly

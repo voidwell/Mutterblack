@@ -24,4 +24,8 @@
     </None>
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mutterblack.App.Test" />
+  </ItemGroup>
+
 </Project>

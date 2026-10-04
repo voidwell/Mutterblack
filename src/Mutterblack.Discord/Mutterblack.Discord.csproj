@@ -6,4 +6,8 @@
     <PackageReference Include="Serilog" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="Mutterblack.Discord.Test" />
+  </ItemGroup>
+
 </Project>
