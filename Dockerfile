@@ -1,23 +1,27 @@
-FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build-env
+# syntax=docker/dockerfile:1.7-labs
+
+# --- Build (restore + publish) ---
+FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /app
 
-# Copy and restore as distinct layers
-COPY *.sln ./
-COPY ./src/Mutterblack.Bot/*.csproj ./src/Mutterblack.Bot/
+COPY Directory.Build.props Directory.Packages.props ./
+COPY --parents ./src/**/*.csproj ./
 
-RUN dotnet restore
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet restore --nologo ./src/Mutterblack.App/Mutterblack.App.csproj
 
-# Copy everything else and build
-COPY . ./
-RUN find -type d -name bin -prune -exec rm -rf {} \; && find -type d -name obj -prune -exec rm -rf {} \;
-RUN dotnet publish -c Release -o /app/out
+COPY . .
 
-# Build runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:6.0
+RUN --mount=type=cache,target=/root/.nuget/packages \
+    dotnet publish -c Release -o /app/publish --no-restore ./src/Mutterblack.App/Mutterblack.App.csproj
 
-# Copy the app
+# --- Runtime ---
+FROM mcr.microsoft.com/dotnet/runtime:10.0
 WORKDIR /app
-COPY --from=build-env /app/out .
 
-# Start the app
-ENTRYPOINT dotnet Mutterblack.Bot.dll
+COPY --from=build /app/publish ./
+
+RUN mkdir -p /data
+VOLUME ["/data"]
+
+ENTRYPOINT ["sh", "-c", "exec dotnet Mutterblack.App.dll"]

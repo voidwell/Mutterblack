@@ -1,7 +1,50 @@
-Dockerfile
-docker-compose.yml
-mutterblack.exe
+# General
 .git
 .gitignore
-README.md
-/data
+.gitattributes
+.github/
+.vscode/
+.idea/
+*.user
+*.swp
+*.swo
+
+# Build outputs
+bin/
+obj/
+**/bin/
+**/obj/
+artifacts/
+out/
+publish/
+
+# NuGet caches on host
+.nuget/
+
+# Logs / runtime artifacts
+*.log
+*.trace
+*.trn
+*.etl
+*.pid
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Tests output
+TestResults/
+*.coverage
+*.coveragexml
+
+# Local SQLite databases - the container gets its own on a mounted volume
+*.db
+*.db-shm
+*.db-wal
+
+# Docker recursion safety
+Dockerfile
+docker-compose.yml
+
+# Test projects
+test/

@@ -1,13 +1,48 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
+## Build output
+bin/
+obj/
+out/
+artifacts/
+publish/
 
-.vs
-.vscode
+## NuGet
+*.nupkg
+*.snupkg
+.nuget/packages/
 
-/build/
+## Logs
+*.log
+*.trace
+*.trn
 
-docker-compose.dev.yml
+## User-specific files
+*.user
+*.suo
+*.rsuser
+
+## Rider / VS / VSCode / JetBrains
+.vscode/
+.idea/
+.vs/
+*.sln.docstates
+
+## Testing
+TestResults/
+*.coverage
+*.coveragexml
+*.trx
+appsettings.Development.json
+
+## OS / Tooling Noise
+.DS_Store
+Thumbs.db
+
+## Local SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+## Cache
+*.cache
+*.temp
+!/src/**/*.Cache/
