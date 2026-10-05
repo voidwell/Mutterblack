@@ -5,10 +5,7 @@ using Mutterblack.App;
 using Mutterblack.Client;
 using Mutterblack.Discord;
 
-var builder = Host.CreateApplicationBuilder(new HostApplicationBuilderSettings
-{
-    ApplicationName = "Mutterblack",
-});
+var builder = Host.CreateApplicationBuilder(args);
 
 builder.Configuration.Sources.Clear();
 builder.Configuration
