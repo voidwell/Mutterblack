@@ -21,7 +21,4 @@ WORKDIR /app
 
 COPY --from=build /app/publish ./
 
-RUN mkdir -p /data
-VOLUME ["/data"]
-
 ENTRYPOINT ["sh", "-c", "exec dotnet Mutterblack.App.dll"]
