@@ -32,6 +32,9 @@ internal sealed class StubHttpMessageHandler : HttpMessageHandler
 
         Requests.Add((request, body));
 
-        return _respond(request, body);
+        var response = _respond(request, body);
+        response.RequestMessage = request;
+
+        return response;
     }
 }

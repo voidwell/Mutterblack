@@ -2,12 +2,13 @@ using System.Net;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Mutterblack.Client.Authentication;
 
 namespace Mutterblack.Client.Test;
 
 public class ServiceCollectionExtensionsTests
 {
+    private const string _tokenServiceHttpClientName = "Voidwell.Common.Authentication.TokenService";
+
     private static readonly Dictionary<string, string?> _validSettings = new()
     {
         ["Voidwell:TokenServiceAddress"] = "https://auth.example.com/connect/token",
@@ -69,23 +70,13 @@ public class ServiceCollectionExtensionsTests
     }
 
     [Fact]
-    public void AddVoidwellClient_SharesOneTokenServiceAcrossResolutions()
-    {
-        using var provider = BuildProvider(_validSettings);
-
-        Assert.Same(
-            provider.GetRequiredService<IVoidwellTokenService>(),
-            provider.GetRequiredService<IVoidwellTokenService>());
-    }
-
-    [Fact]
     public async Task VoidwellClient_AuthenticatesRequestsAndReusesTheTokenAcrossCalls()
     {
         var tokenEndpoint = new StubHttpMessageHandler(HttpStatusCode.OK, """{"access_token":"token-1","expires_in":3600}""");
         var api = new StubHttpMessageHandler(HttpStatusCode.OK, """{"name":"MSW-R"}""");
 
         var services = CreateServices(_validSettings);
-        services.AddHttpClient(VoidwellTokenService.HttpClientName).ConfigurePrimaryHttpMessageHandler(() => tokenEndpoint);
+        services.AddHttpClient(_tokenServiceHttpClientName).ConfigurePrimaryHttpMessageHandler(() => tokenEndpoint);
         services.AddHttpClient<VoidwellClient>().ConfigurePrimaryHttpMessageHandler(() => api);
         await using var provider = services.BuildServiceProvider();
 
@@ -111,7 +102,7 @@ public class ServiceCollectionExtensionsTests
                 : StubHttpMessageHandler.Json(HttpStatusCode.Unauthorized, ""));
 
         var services = CreateServices(_validSettings);
-        services.AddHttpClient(VoidwellTokenService.HttpClientName).ConfigurePrimaryHttpMessageHandler(() => tokenEndpoint);
+        services.AddHttpClient(_tokenServiceHttpClientName).ConfigurePrimaryHttpMessageHandler(() => tokenEndpoint);
         services.AddHttpClient<VoidwellClient>().ConfigurePrimaryHttpMessageHandler(() => api);
         await using var provider = services.BuildServiceProvider();
 

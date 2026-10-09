@@ -1,5 +1,6 @@
 using Microsoft.Extensions.DependencyInjection;
-using Mutterblack.Client.Authentication;
+using Microsoft.Extensions.Options;
+using Voidwell.Common.Authentication;
 
 namespace Mutterblack.Client;
 
@@ -11,17 +12,19 @@ public static class ServiceCollectionExtensions
             .BindConfiguration("Voidwell")
             .ValidateDataAnnotations();
 
-        services.AddSingleton(TimeProvider.System);
-
-        services.AddHttpClient(VoidwellTokenService.HttpClientName);
-        services.AddSingleton<IVoidwellTokenService, VoidwellTokenService>();
-        services.AddTransient<VoidwellAuthHandler>();
-
         services.AddHttpClient<VoidwellClient>(client =>
         {
             client.BaseAddress = new Uri("https://api.voidwell.com/");
         })
-        .AddHttpMessageHandler<VoidwellAuthHandler>();
+        .AddTokenHandler((serviceProvider, options) =>
+        {
+            var clientOptions = serviceProvider.GetRequiredService<IOptions<VoidwellClientOptions>>().Value;
+
+            options.TokenServiceAddress = clientOptions.TokenServiceAddress;
+            options.ClientId = clientOptions.ClientId;
+            options.ClientSecret = clientOptions.ClientSecret;
+            options.ClientScopes = clientOptions.ClientScopes;
+        });
 
         return services;
     }
