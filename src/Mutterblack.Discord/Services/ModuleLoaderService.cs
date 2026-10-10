@@ -27,7 +27,9 @@ internal class ModuleLoaderService : DiscordClientService
 
     protected override async Task ExecuteAsync(CancellationToken cancellationToken)
     {
-        await _interactionService.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
+        var modules = await _interactionService.AddModulesAsync(Assembly.GetEntryAssembly()!, _serviceProvider);
+
+        Logger.LogInformation("Loaded {Count} interaction modules", modules.Count());
 
         await Client.WaitForReadyAsync(cancellationToken);
 
