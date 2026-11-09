@@ -13,7 +13,7 @@
     <PackageVersion Include="Serilog" Version="4.4.0" />
     <PackageVersion Include="Voidwell.Common.Authentication" Version="1.0.4" />
     <PackageVersion Include="Voidwell.Common.Logging" Version="1.0.4" />
-    <PackageVersion Include="xunit.v3" Version="4.0.2" />
+    <PackageVersion Include="xunit.v3" Version="4.0.3" />
   </ItemGroup>
 
 </Project>
